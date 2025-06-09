@@ -1,17 +1,17 @@
-const { userRouter, Router } = require("express");
+const express = require("express");
+const userRouter = express.Router();
 
-const userRouter = Router();
-app.post("/signup", function (req, res) {
+userRouter.post("/signup", (req, res) => {
   res.json({
     message: "signup endpoint",
   });
 });
-app.post("/signin", function (req, res) {
+userRouter.post("/signin", (req, res) => {
   res.json({
     message: "signup endpoint",
   });
 });
-app.post("/purchases", function (req, res) {
+userRouter.post("/purchases", (req, res) => {
   res.json({
     message: "signup endpoint",
   });

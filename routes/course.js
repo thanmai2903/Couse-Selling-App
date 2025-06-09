@@ -1,13 +1,13 @@
-const { courseRouter, Router } = require("express");
-const courseRouter = Router();
-app.post("/course/purchase", function (req, res) {
+const express = require("express");
+const courseRouter = express.Router();
+courseRouter.post("/purchase", function (req, res) {
   res.json({
-    message: "signup endpoint",
+    message: "purchase endpoint",
   });
 });
-app.post("/course/preview", function (req, res) {
+courseRouter.get("/preview", function (req, res) {
   res.json({
-    message: "signup endpoint",
+    message: "preview endpoint",
   });
 });
 
