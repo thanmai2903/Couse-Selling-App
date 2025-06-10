@@ -21,7 +21,7 @@ const courseSchema = new Schema({
   discription: String,
   price: Number,
   imageUrl: String,
-  creatorId: ObjectId,
+  creatorId: ObjectId, //reference
 });
 const purchaseSchema = new Schema({
   userId: ObjectId,
@@ -38,5 +38,3 @@ module.exports = {
   courseModel,
   purchaseModel,
 };
-
-// adpvVjh12YqJDNnU;
