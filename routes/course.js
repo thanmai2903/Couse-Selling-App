@@ -5,6 +5,7 @@ const courseRouter = express.Router();
 courseRouter.post("/purchase", userMiddleware, async (req, res) => {
   const userId = req.userId;
   const courseId = req.body.courseId;
+  //check if user paid for course
   await purchaseModel.create({
     userId,
     courseId,
