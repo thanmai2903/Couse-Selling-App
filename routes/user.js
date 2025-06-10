@@ -3,6 +3,7 @@ const userRouter = express.Router();
 const { userModel } = require("./db");
 const jwt = require("jsonwebtoken");
 const { JWT_USER_PASSWORD } = require("./config");
+const { userMiddleware } = require("../middleware/user");
 userRouter.post("/signup", async (req, res) => {
   const { email, password, firstName, lastName } = req.body; // adding zod validation
   //hash password so plaintext password is not storted in db
@@ -40,9 +41,13 @@ userRouter.post("/signin", async (req, res) => {
     });
   }
 });
-userRouter.post("/purchases", (req, res) => {
+userRouter.post("/purchases", userMiddleware, async (req, res) => {
+  const userId = req.userId;
+  const purchases = await purchaseModel.find({
+    userId,
+  });
   res.json({
-    message: "signup endpoint",
+    purchases,
   });
 });
 
