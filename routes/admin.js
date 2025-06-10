@@ -34,6 +34,7 @@ adminRouter.post("/signin", async (req, res) => {
       },
       JWT_ADMIN_PASSWORD
     );
+
     res.json({
       token: token,
     });
@@ -46,12 +47,12 @@ adminRouter.post("/signin", async (req, res) => {
 adminRouter.post("/course", adminMiddleware, async (req, res) => {
   const adminId = req.userId;
   const { title, description, imageUrl, price } = req.body;
-  await courseModel.create({
+  const course = await courseModel.create({
     title: title,
     description: description,
     imageUrl: imageUrl,
     price: price,
-    adminId: creatorId,
+    adminId: adminId,
   });
   res.json({
     message: "course created",
@@ -61,31 +62,33 @@ adminRouter.post("/course", adminMiddleware, async (req, res) => {
 adminRouter.put("/course", adminMiddleware, async (req, res) => {
   const adminId = req.userId;
   const { title, description, imageUrl, price, courseId } = req.body;
-  const course = await courseModel.updateOne(
+  const course = await courseModel.findOneAndUpdate(
     {
       _id: courseId,
-      creatorId: adminId,
+      adminId,
     },
     {
       title: title,
       description: description,
       imageUrl: imageUrl,
       price: price,
-      adminId: creatorId,
+      adminId: adminId,
     }
   );
+  if (!course) {
+    return res.status(404).json({
+      message: "Course not found or not authorized to update",
+    });
+  }
   res.json({
     message: "course updated",
     courseId: course._id,
-  });
-  res.json({
-    message: "signup admin",
   });
 });
 adminRouter.get("/course/bulk", async (req, res) => {
   const adminId = req.userId;
   const courses = await courseModel.find({
-    creatorId: adminId,
+    adminId,
   });
   res.json({
     message: "course updated",
