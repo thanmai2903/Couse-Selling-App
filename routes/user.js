@@ -2,7 +2,7 @@ const express = require("express");
 const userRouter = express.Router();
 const { userModel } = require("./db");
 const jwt = require("jsonwebtoken");
-const JWT_USER_PASSWORD = "#Narasimha123";
+const { JWT_USER_PASSWORD } = require("./config");
 userRouter.post("/signup", async (req, res) => {
   const { email, password, firstName, lastName } = req.body; // adding zod validation
   //hash password so plaintext password is not storted in db
