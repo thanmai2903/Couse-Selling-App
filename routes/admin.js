@@ -2,7 +2,7 @@ const { Router } = require("express");
 const adminRouter = Router();
 const { adminModel, courseModel } = require("./db");
 const jwt = require("jsonwebtoken");
-const { JWT_ADMIN_PASSWORD } = require("./config.js");
+const { JWT_ADMIN_PASSWORD } = require("./config");
 const { adminMiddleware } = require("../middleware/admin");
 //bcrypt for only signin and signup
 //to validate zod used and json web token to create jwt
@@ -58,14 +58,38 @@ adminRouter.post("/course", adminMiddleware, async (req, res) => {
     courseId: course._id,
   });
 });
-adminRouter.put("/course", (req, res) => {
+adminRouter.put("/course", adminMiddleware, async (req, res) => {
+  const adminId = req.userId;
+  const { title, description, imageUrl, price, courseId } = req.body;
+  const course = await courseModel.updateOne(
+    {
+      _id: courseId,
+      creatorId: adminId,
+    },
+    {
+      title: title,
+      description: description,
+      imageUrl: imageUrl,
+      price: price,
+      adminId: creatorId,
+    }
+  );
+  res.json({
+    message: "course updated",
+    courseId: course._id,
+  });
   res.json({
     message: "signup admin",
   });
 });
-adminRouter.get("/bulk", (req, res) => {
+adminRouter.get("/course/bulk", async (req, res) => {
+  const adminId = req.userId;
+  const courses = await courseModel.find({
+    creatorId: adminId,
+  });
   res.json({
-    message: "signup admin",
+    message: "course updated",
+    courses,
   });
 });
 module.exports = {
